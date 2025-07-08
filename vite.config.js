@@ -25,16 +25,8 @@ export default defineConfig(({ mode }) => {
       outDir: 'dist',
       assetsDir: 'assets',
       sourcemap: false,
-      minify: 'terser',
-      terserOptions: {
-        compress: {
-          drop_console: true,
-          drop_debugger: true,
-        },
-        format: {
-          comments: false,
-        },
-      },
+      minify: 'esbuild',
+      cssMinify: 'esbuild',
       cssCodeSplit: true,
       rollupOptions: {
         output: {
