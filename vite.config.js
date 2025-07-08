@@ -15,11 +15,13 @@ export default defineConfig(({ mode }) => {
     }, {})
   };
   
+  const isProduction = mode === 'production';
+  
   return {
     plugins: [react()],
     define: envWithProcessPrefix,
     // Base public path when served in production
-    base: '/',
+    base: isProduction ? '/' : '/',
     // Build configuration
     build: {
       outDir: 'dist',

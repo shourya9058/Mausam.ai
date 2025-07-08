@@ -2,9 +2,7 @@ services:
   - type: web
     name: mausam-ai
     env: static
-    buildCommand: |
-      npm ci
-      npm run build
+    buildCommand: chmod +x ./render-build.sh && ./render-build.sh
     staticPublishPath: "./dist"
     envVars:
       - key: VITE_OPENWEATHER_API_KEY
