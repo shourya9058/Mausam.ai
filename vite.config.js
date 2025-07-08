@@ -2,15 +2,22 @@ import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
 
 export default defineConfig(({ mode }) => {
-  // Load env file based on `mode` in the current directory.
-  // Set the third parameter to '' to load all env regardless of the `VITE_` prefix.
+  // Load only Vite prefixed env variables
   const env = loadEnv(mode, process.cwd(), '');
+  
+  // Only include Vite prefixed env variables
+  const envWithProcessPrefix = {
+    'process.env': Object.entries(env).reduce((acc, [key, val]) => {
+      if (key.startsWith('VITE_')) {
+        acc[key] = `"${val}"`;
+      }
+      return acc;
+    }, {})
+  };
   
   return {
     plugins: [react()],
-    define: {
-      'process.env': process.env,
-    },
+    define: envWithProcessPrefix,
     // Base public path when served in production
     base: '/',
     // Build configuration
@@ -24,7 +31,11 @@ export default defineConfig(({ mode }) => {
           drop_console: true,
           drop_debugger: true,
         },
+        format: {
+          comments: false,
+        },
       },
+      cssCodeSplit: true,
       rollupOptions: {
         output: {
           manualChunks: {
