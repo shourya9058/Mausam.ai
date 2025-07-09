@@ -7,15 +7,24 @@ export default function SearchBox({ updateInfo }) {
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
 
-    const API_URL = "https://api.openweathermap.org/data/2.5/weather";
-    const API_KEY = "25aae518d4575bb056663f66b398774e";
+    const API_URL = import.meta.env.VITE_API_BASE_URL || "https://api.openweathermap.org/data/2.5";
+    const API_KEY = import.meta.env.VITE_WEATHER_API_KEY || "25aae518d4575bb056663f66b398774e";
+
+    if (!API_KEY) {
+        console.error("API key is missing. Please set VITE_WEATHER_API_KEY in your .env file");
+    }
 
     const getWeatherInfo = async () => {
         try {
             setLoading(true);
             setError(null);
+            
+            if (!city.trim()) {
+                throw new Error('Please enter a city name');
+            }
+
             const response = await fetch(
-                `${API_URL}?q=${city}&appid=${API_KEY}&units=metric`
+                `${API_URL}/weather?q=${encodeURIComponent(city)}&appid=${API_KEY}&units=metric`
             );
             
             if (!response.ok) {

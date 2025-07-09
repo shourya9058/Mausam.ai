@@ -1,18 +1,13 @@
 services:
   - type: web
     name: mausam-ai
-    env: static
-    buildCommand: chmod +x ./render-build.sh && ./render-build.sh
-    staticPublishPath: "./dist"
+    env: node
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
     envVars:
-      - key: VITE_OPENWEATHER_API_KEY
-        required: true
-    build:
-      nodeVersion: 18
-    static:
-      env: production
-      skipCleanup: true
-    routes:
-      - type: rewrite
-        source: '/*'
-        destination: '/index.html'
+      - key: VITE_WEATHER_API_KEY
+        sync: false  # This needs to be set in the Render dashboard
+      - key: VITE_API_BASE_URL
+        value: https://api.openweathermap.org/data/2.5
+      - key: VITE_DEFAULT_CITY
+        value: New Delhi
